@@ -741,12 +741,8 @@ hlist &lt;- c(&quot;USNewYearsDay&quot;, &quot;USInaugurationDay&quot;, &quot;US
 
 # Creating a new field in the data frame to identify if the started date was a public holiday
 all_data_df &lt;- mutate(all_data_df, is_public_holiday=date(started_at) == as.character(holiday(2021:2022,hlist)))</code></pre>
-<pre><code>## Warning in `==.default`(date(started_at), as.character(holiday(2021:2022, :
-## longer object length is not a multiple of shorter object length</code></pre>
 <pre class="r"><code># Creating a new field in the data frame to identify the holiday
 all_data_df &lt;- mutate(all_data_df, which_public_holiday=ifelse(date(started_at) == as.character(holiday(2021:2022,hlist)), hlist, &quot;No public Holiday&quot;))</code></pre>
-<pre><code>## Warning in `==.default`(date(started_at), as.character(holiday(2021:2022, :
-## longer object length is not a multiple of shorter object length</code></pre>
 <pre class="r"><code>head(all_data_df)</code></pre>
 <pre><code>##            ride_id rideable_type          started_at            ended_at
 ## 1 99FEC93BA843FB20 electric_bike 2021-06-13 14:31:28 2021-06-13 14:34:11
