@@ -839,8 +839,6 @@ the current offerings to cater to more long range rides.</p>
 <li>Analysis of bike type by type of rider</li>
 </ol>
 <pre class="r"><code>pie_df &lt;- all_data_df %&gt;% dplyr::group_by(member_casual, rideable_type) %&gt;% dplyr::summarise(count = n()) %&gt;% dplyr::mutate(ratio = (count/sum(count))) %&gt;% dplyr::mutate(percentage = scales::percent(ratio))</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;member_casual&#39;. You can override using the
-## `.groups` argument.</code></pre>
 <pre class="r"><code>ggplot(data=pie_df, aes(x=&quot;&quot;, y=ratio, fill=rideable_type)) +
          geom_col() + geom_text(aes(label = percentage), position = position_stack(vjust = 0.5)) +
          coord_polar(&quot;y&quot;, start=0) +
