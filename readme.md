@@ -57,211 +57,24 @@ The tools that will be used to process and analyse the data include the followin
 
 ```r
 library(tidyverse)
-```
-
-```
-## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-## ✔ ggplot2 3.3.6      ✔ purrr   0.3.4 
-## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
-## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
-## ✔ readr   2.1.3      ✔ forcats 0.5.2 
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-```
-
-```r
 library(ggplot2)
 library(lubridate)
-```
-
-```
-## 
-## Attaching package: 'lubridate'
-## 
-## The following objects are masked from 'package:base':
-## 
-##     date, intersect, setdiff, union
-```
-
-```r
 library(dplyr)
 library(readr)
 library(janitor)
-```
-
-```
-## 
-## Attaching package: 'janitor'
-## 
-## The following objects are masked from 'package:stats':
-## 
-##     chisq.test, fisher.test
-```
-
-```r
 library(tidyr)
 library(here)
-```
-
-```
-## here() starts at /Users/Thoma/google_data_analytics_data
-```
-
-```r
 library(skimr)
 library(hms)
-```
-
-```
-## 
-## Attaching package: 'hms'
-## 
-## The following object is masked from 'package:lubridate':
-## 
-##     hms
-```
-
-```r
 library(hydroTSM)
-```
-
-```
-## Loading required package: zoo
-## 
-## Attaching package: 'zoo'
-## 
-## The following objects are masked from 'package:base':
-## 
-##     as.Date, as.Date.numeric
-## 
-## Loading required package: xts
-## 
-## Attaching package: 'xts'
-## 
-## The following objects are masked from 'package:dplyr':
-## 
-##     first, last
-## 
-## 
-## Attaching package: 'hydroTSM'
-## 
-## The following object is masked from 'package:tidyr':
-## 
-##     extract
-```
-
-```r
 library(timeDate)
 library(chron)
-```
-
-```
-## 
-## Attaching package: 'chron'
-## 
-## The following objects are masked from 'package:lubridate':
-## 
-##     days, hours, minutes, seconds, years
-```
-
-```r
 library(data.table)
-```
-
-```
-## 
-## Attaching package: 'data.table'
-## 
-## The following objects are masked from 'package:xts':
-## 
-##     first, last
-## 
-## The following objects are masked from 'package:lubridate':
-## 
-##     hour, isoweek, mday, minute, month, quarter, second, wday, week,
-##     yday, year
-## 
-## The following objects are masked from 'package:dplyr':
-## 
-##     between, first, last
-## 
-## The following object is masked from 'package:purrr':
-## 
-##     transpose
-```
-
-```r
 library(Rmisc)
-```
-
-```
-## Loading required package: lattice
-## Loading required package: plyr
-## ------------------------------------------------------------------------------
-## You have loaded plyr after dplyr - this is likely to cause problems.
-## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
-## library(plyr); library(dplyr)
-## ------------------------------------------------------------------------------
-## 
-## Attaching package: 'plyr'
-## 
-## The following object is masked from 'package:here':
-## 
-##     here
-## 
-## The following objects are masked from 'package:dplyr':
-## 
-##     arrange, count, desc, failwith, id, mutate, rename, summarise,
-##     summarize
-## 
-## The following object is masked from 'package:purrr':
-## 
-##     compact
-```
-
-```r
 library(s20x)
-```
-
-```
-## 
-## Attaching package: 's20x'
-## 
-## The following object is masked from 'package:timeDate':
-## 
-##     skewness
-```
-
-```r
 library(leaflet)
-```
-
-```
-## 
-## Attaching package: 'leaflet'
-## 
-## The following object is masked from 'package:xts':
-## 
-##     addLegend
-```
-
-```r
 library(sp)
 library(scales)
-```
-
-```
-## 
-## Attaching package: 'scales'
-## 
-## The following object is masked from 'package:purrr':
-## 
-##     discard
-## 
-## The following object is masked from 'package:readr':
-## 
-##     col_factor
 ```
 
 3. Loading in the data files and adding them to one data frame for easier access
@@ -582,24 +395,10 @@ hlist <- c("USNewYearsDay", "USInaugurationDay", "USMLKingsBirthday", "USLincoln
 
 # Creating a new field in the data frame to identify if the started date was a public holiday
 all_data_df <- mutate(all_data_df, is_public_holiday=date(started_at) == as.character(holiday(2021:2022,hlist)))
-```
 
-```
-## Warning in `==.default`(date(started_at), as.character(holiday(2021:2022, :
-## longer object length is not a multiple of shorter object length
-```
-
-```r
 # Creating a new field in the data frame to identify the holiday
 all_data_df <- mutate(all_data_df, which_public_holiday=ifelse(date(started_at) == as.character(holiday(2021:2022,hlist)), hlist, "No public Holiday"))
-```
 
-```
-## Warning in `==.default`(date(started_at), as.character(holiday(2021:2022, :
-## longer object length is not a multiple of shorter object length
-```
-
-```r
 head(all_data_df)
 ```
 
@@ -726,14 +525,7 @@ From above, it seems like casual riders, on average, ride 6.35 minutes longer th
 
 ```r
 pie_df <- all_data_df %>% dplyr::group_by(member_casual, rideable_type) %>% dplyr::summarise(count = n()) %>% dplyr::mutate(ratio = (count/sum(count))) %>% dplyr::mutate(percentage = scales::percent(ratio))
-```
 
-```
-## `summarise()` has grouped output by 'member_casual'. You can override using the
-## `.groups` argument.
-```
-
-```r
 ggplot(data=pie_df, aes(x="", y=ratio, fill=rideable_type)) +
          geom_col() + geom_text(aes(label = percentage), position = position_stack(vjust = 0.5)) +
          coord_polar("y", start=0) +
@@ -753,12 +545,6 @@ ggplot(all_data_df, aes(x = rideable_type)) + geom_bar() + labs(title = "Count o
 
 ```r
 all_data_df %>% group_by(start_station_name, member_casual, rideable_type, season, day_of_week, start_lat, start_lng) %>% dplyr::summarise(n_count = n()) %>% dplyr::arrange(desc(n_count)) %>% filter(start_station_name != "" & rideable_type == "docked_bike", n_count >= 914)
-```
-
-```
-## `summarise()` has grouped output by 'start_station_name', 'member_casual',
-## 'rideable_type', 'season', 'day_of_week', 'start_lat'. You can override using
-## the `.groups` argument.
 ```
 
 ```
@@ -787,14 +573,7 @@ From the plots above, it seems that the preferred bike of choice for all riders 
 
 ```r
 avg_duration_df <- all_data_df %>% dplyr::group_by(day_of_week, member_casual) %>% dplyr::summarise(median_ride_length = median(ride_length), n_count = n())
-```
 
-```
-## `summarise()` has grouped output by 'day_of_week'. You can override using the
-## `.groups` argument.
-```
-
-```r
 ggplot(avg_duration_df) + geom_bar(aes(x = day_of_week, y=n_count, fill = member_casual), stat="identity", position="dodge") + labs(title = "Count of riders by rider type and day of the week", x = "Day of the week", y = "Count of riders")
 ```
 
@@ -809,20 +588,14 @@ ggplot(avg_duration_df, aes(x=day_of_week, y=median_ride_length, colour=member_c
 ```
 
 ![](google_data_analytics_capstone_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+
 From the plots above, we can see that casual riders usually use Cyclistic's services more in the weekends than in the weekdays to travel long distances. On the other hand, annual members use the services more on the weekdays than on the weekends to travel shorter distances. We can also see that casual riders tend to use Cyclistics's service most on Saturdays and the least on Wednesdays. Members tend to use Cyclistic's services most on Tuesdays and least on Sundays. Casual riders also, on average, ride between 16 and 18 minutes during the weekends while members ride for approximately 10 to 11 minutes. On average we also see that casual riders ride for longer than members do every day of the week. This and the plot from 6. suggests that members are using Cyclistic's services  on the weekdays to possibly to travel short distances for work purposes while casual riders are using it on the weekends for travelling long distances to conduct leisure activities / exercise. It may be worth for Cyclistic to take note of this and implement promotions for riders riding for longer durations which could potentially increase conversion rate for casual riders. Conducting conpetitions such as bike marathons on weekends could also potentially be successful in increasing the coinversion rate.
 
 7. Analysis of count of rider by the type of rider and by season
 
 ```r
 avg_duration_season_df <- all_data_df %>% dplyr::group_by(season, member_casual) %>% dplyr::summarise(median_ride_length = median(ride_length), n_count = n())
-```
 
-```
-## `summarise()` has grouped output by 'season'. You can override using the
-## `.groups` argument.
-```
-
-```r
 ggplot(avg_duration_season_df) + 
   geom_bar(aes(x = season, y=n_count, fill = member_casual), stat="identity", position="dodge") + 
   labs(title = "Count of riders by rider type and season", x = "season", y = "Count of riders") + 
@@ -846,14 +619,7 @@ From the plots above, we can see that most of the riders (members and casuals) r
 
 ```r
 avg_duration_holiday_df <- all_data_df %>% dplyr::group_by(which_public_holiday, member_casual) %>% dplyr::summarise(median_ride_length = median(ride_length), n_count = n())
-```
 
-```
-## `summarise()` has grouped output by 'which_public_holiday'. You can override
-## using the `.groups` argument.
-```
-
-```r
 ggplot(avg_duration_holiday_df) + 
   geom_bar(aes(x = which_public_holiday, y=n_count, fill = member_casual), stat="identity", position="dodge") + 
   labs(title = "Count of riders by rider type and public holiday", x = "season", y = "Count of riders") + 
@@ -868,11 +634,6 @@ From the plot above, it seems that both members and casual riders don't ride muc
 
 ```r
 all_data_df %>% group_by(start_station_name, member_casual, start_lat, start_lng) %>% dplyr::summarise(n_count = n()) %>% dplyr::arrange(desc(n_count)) %>% filter(start_station_name != "" & n_count >= 15494)
-```
-
-```
-## `summarise()` has grouped output by 'start_station_name', 'member_casual',
-## 'start_lat'. You can override using the `.groups` argument.
 ```
 
 ```
@@ -898,11 +659,6 @@ all_data_df %>% group_by(end_station_name, member_casual, end_lat, end_lng) %>% 
 ```
 
 ```
-## `summarise()` has grouped output by 'end_station_name', 'member_casual',
-## 'end_lat'. You can override using the `.groups` argument.
-```
-
-```
 ## # A tibble: 10 × 5
 ## # Groups:   end_station_name, member_casual, end_lat [10]
 ##    end_station_name                   member_casual end_lat end_lng n_count
@@ -921,6 +677,9 @@ all_data_df %>% group_by(end_station_name, member_casual, end_lat, end_lng) %>% 
 
 From the table above, we can see that for casual members, most of them start and end using Cyclistic's service in Streeter Dr & Grand Ave with a total of 55499 rows. As such, to increase conversion rates of casual riders, Cyclistic should focus promotions/competitions in that area in order to engage with the casual riders.
 
+# Visualising the Data
+
+[Tableau Visualisation](https://public.tableau.com/app/profile/sebastian.thomas7257/viz/CyclisticBikeShareAnalysis_16777008614140/CyclisticBikeShareAnalysis)
 
 # Top 3 Recommendations to increase conversion rate of causual riders
 
@@ -929,6 +688,4 @@ From the table above, we can see that for casual members, most of them start and
 2. Promoting the use of bikes during summer.
 
 3. Continuing to offer electric and classic bike services as they are the most popular bike services but also piloting an increase in the currennt offerings for docked bikes, especially at places such as Streeter Dr & Grand Ave during summer and the weekends.
-
-Please also see: [Tableau Visualisation](https://public.tableau.com/app/profile/sebastian.thomas7257/viz/CyclisticBikeShareAnalysis_16777008614140/CyclisticBikeShareAnalysis)
 
